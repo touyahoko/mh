@@ -15,3 +15,6 @@ dev_dependencies:
     sdk: flutter
 flutter:
   uses-material-design: true
+  flutter:
+  assets:
+    - assets/mh4g_charm_tables.json
