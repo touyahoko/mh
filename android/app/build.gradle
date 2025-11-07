@@ -1,7 +1,7 @@
 plugins {
     id "com.android.application"
     id "kotlin-android"
-    id "dev.flutter.flutter-gradle-plugin"
+    id "org.gradle.toolchains.foojay-resolver-convention" version "0.8.0"
 }
 
 def localProperties = new Properties()
@@ -51,4 +51,4 @@ flutter {
     source '../..'
 }
 
-dependencies {}
+dependencies {}　
