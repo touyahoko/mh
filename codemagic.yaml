@@ -1,0 +1,35 @@
+workflows:
+  ossansnipe_flutter_apk:
+    name: Build OssanSnipeTool APK
+    instance_type: mac_mini
+    max_build_duration: 60
+    environment:
+      flutter: stable
+      vars:
+        PACKAGE_NAME: "com.example.ossansnipe"
+        APP_NAME: "OssanSnipeTool"
+    scripts:
+      - name: 🧹 Clean project
+        script: |
+          flutter clean
+          rm -rf build
+
+      - name: 📦 Get Flutter packages
+        script: flutter pub get
+
+      - name: 🏗️ Build APK (Release)
+        script: flutter build apk --release
+
+      - name: ✅ Verify build success
+        script: ls -la build/app/outputs/flutter-apk/
+
+    artifacts:
+      - build/app/outputs/flutter-apk/*.apk
+
+    publishing:
+      email:
+        recipients:
+          - your_email@example.com
+        notify:
+          success: true
+          failure: true

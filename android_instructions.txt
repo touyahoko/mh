@@ -1,0 +1,1 @@
+Open this project in Android Studio: create new Flutter project and replace lib/main.dart and pubspec.yaml with these files. Or run 'flutter create .' in this folder to generate Android/ios directories before building.
