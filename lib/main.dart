@@ -396,3 +396,17 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
+
+import 'package:flutter/services.dart' show rootBundle;
+import 'dart:convert';
+
+Future<void> loadCharmTable() async {
+  try {
+    String jsonString = await rootBundle.loadString('assets/mh4g_charm_tables.json');
+    Map<String, dynamic> charmData = json.decode(jsonString);
+    // ここでcharmDataを使って処理
+    print("チャームテーブル読み込み成功！エントリ数: ${charmData.length}");
+  } catch (e) {
+    print("読み込み失敗: $e");
+  }
+}
