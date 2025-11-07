@@ -1,41 +1,36 @@
-name: Build Flutter APK
+name: Build APK
 
 on:
+  workflow_dispatch:  # 手動実行可能
   push:
-    branches:
-      - main
-  workflow_dispatch:
+    paths:
+      - 'OssanSnipeFlutter_project/**'
 
 jobs:
   build:
-    name: Build APK
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: OssanSnipeFlutter_project  # プロジェクトフォルダ指定
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v4  # 最新版
 
-      - name: Unzip Flutter project
-        run: |
-          sudo apt-get install -y unzip
-          unzip OssanSnipeFlutter_project.zip -d OssanSnipeFlutter_project
-
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2  # v2に変更！（v1廃止）
         with:
-          flutter-version: "3.24.3"  # 最新安定版
-          channel: "stable"
+          flutter-version: '3.24.3'
+          channel: 'stable'
 
-      - name: Install dependencies
-        working-directory: OssanSnipeFlutter_project
+      - name: Get dependencies
         run: flutter pub get
 
-      - name: Build release APK
-        working-directory: OssanSnipeFlutter_project
+      - name: Build Release APK
         run: flutter build apk --release
 
-      - name: Upload APK artifact
-        uses: actions/upload-artifact@v3
+      - name: Upload APK
+        uses: actions/upload-artifact@v4  # 最新版
         with:
           name: OssanSnipeFlutter-APK
-          path: OssanSnipeFlutter_project/build/app/outputs/flutter-apk/app-release.apk
+          path: build/app/outputs/flutter-apk/app-release.apk
