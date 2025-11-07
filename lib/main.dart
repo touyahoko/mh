@@ -1,14 +1,18 @@
-
 // lib/main.dart
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle; // これ追加！
 import 'package:file_picker/file_picker.dart';
 import 'package:csv/csv.dart';
 import 'package:intl/intl.dart';
 
-void main() => runApp(MH4G_OssanFlutter());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized(); // これ追加！
+  await loadCharmTable(); // ここで自動読み込み！
+  runApp(MH4G_OssanFlutter());
+}
 
 class MH4G_OssanFlutter extends StatelessWidget {
   @override
@@ -397,15 +401,13 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-import 'package:flutter/services.dart' show rootBundle;
-import 'dart:convert';
-
+// assets/mh4g_charm_tables.json を自動読み込み
 Future<void> loadCharmTable() async {
   try {
     String jsonString = await rootBundle.loadString('assets/mh4g_charm_tables.json');
     Map<String, dynamic> charmData = json.decode(jsonString);
-    // ここでcharmDataを使って処理
     print("チャームテーブル読み込み成功！エントリ数: ${charmData.length}");
+    // ここで charmTable に代入したいなら、グローバル変数にするか、Providerを使う
   } catch (e) {
     print("読み込み失敗: $e");
   }
