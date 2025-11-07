@@ -3,8 +3,7 @@ name: Build APK
 on:
   workflow_dispatch:
   push:
-    paths:
-      - 'OssanSnipeFlutter_project/**'
+    branches: [ main ]
 
 jobs:
   build:
@@ -14,25 +13,23 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: List files (debug)
+        run: ls -la
+
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.24.3'
           channel: 'stable'
 
-      - name: Change to project directory
-        run: cd OssanSnipeFlutter_project
-
       - name: Get dependencies
         run: flutter pub get
-        working-directory: OssanSnipeFlutter_project
 
       - name: Build Release APK
         run: flutter build apk --release
-        working-directory: OssanSnipeFlutter_project
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: OssanSnipeFlutter-APK
-          path: OssanSnipeFlutter_project/build/app/outputs/flutter-apk/app-release.apk
+          path: build/app/outputs/flutter-apk/app-release.apk
