@@ -1,0 +1,43 @@
+name: Build APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.3'
+          channel: 'stable'
+
+      - name: Create new Flutter project
+        run: flutter create --project-name ossansnipe --org com.example ossansnipe_temp
+
+      - name: Copy Dart code and assets to new project
+        run: |
+          cp -r lib/* ossansnipe_temp/lib/
+          cp pubspec.yaml ossansnipe_temp/pubspec.yaml
+          cp -r assets/* ossansnipe_temp/assets/ 2>/dev/null || true
+
+      - name: Get dependencies in new project
+        run: flutter pub get
+        working-directory: ossansnipe_temp
+
+      - name: Build Release APK from new project
+        run: flutter build apk --release
+        working-directory: ossansnipe_temp
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: OssanSnipeFlutter-APK
+          path: ossansnipe_temp/build/app/outputs/flutter-apk/app-release.apk
